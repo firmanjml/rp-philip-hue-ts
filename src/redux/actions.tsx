@@ -1,6 +1,7 @@
 import C from './constants';
 import axios from 'axios';
 import { Alert } from 'react-native';
+import Constants from 'expo-constants';
 
 export const ChangeLoading = (visibility: boolean) => ({
     type: C.CHANGE_LOADING,
@@ -39,8 +40,7 @@ export const ClearBridge = () => (dispatch) => {
     });
 }
 
-export const ManualSearchBridge = (bridge_ip: string) => async (dispatch) => {
-    
+export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (dispatch) => {
     try {
         dispatch(SearchBridgeLoading(true));
         const response = await axios({
@@ -50,9 +50,12 @@ export const ManualSearchBridge = (bridge_ip: string) => async (dispatch) => {
         if (response.data.modelid === "BSB001") {
             dispatch({
                 type: C.PAIRING_BRIDGE,
-                payload: bridge_ip
+                payload: {
+                    ip: bridge_ip,
+                    id: response.data.bridgeid
+                }
             });
-            console.log('navigate')
+            navigate('PairBridge');
         } else {
             Alert.alert(
                 "Unsupported Bridge",
@@ -83,3 +86,26 @@ export const ManualSearchBridge = (bridge_ip: string) => async (dispatch) => {
     }
 }
 
+export const PairBridge = () => async (dispatch, getState) => {
+    const bridgeip = getState().pairing_bridge.ip;
+    const response = await axios({
+        url: `http://${bridgeip}/api`,
+        method: 'POST',
+        data: {
+            devicetype: `Lighue#${Constants.deviceName}`
+        } 
+    });
+
+    if (response && response.data[0].success) {
+        const result = await axios({
+            url: `http://${bridgeip}/api/nouser/config`,
+            method: 'GET'
+        });
+
+        dispatch({
+            type: C.ADD_BRIDGE,
+            username: response.data[0].success.username,
+            payload: result.data
+        });
+    }
+}

@@ -55,13 +55,15 @@ const search_bridge_list = (state: Array<object> = [], action) => {
 const bridge_list = (state: object = {}, action) => {
     if (action.type === C.ADD_BRIDGE) {
         state[action.payload.bridgeid] = action.payload;
+        state[action.payload.bridgeid]['username'] = action.username;
+        console.log(state);
         return state;
     } else {
         return state;
     }
 }
 
-const pairing_bridge = (state: string = "", action) => {
+const pairing_bridge = (state: object = {}, action) => {
     if (action.type === C.PAIRING_BRIDGE) {
         state = action.payload;
         return state;

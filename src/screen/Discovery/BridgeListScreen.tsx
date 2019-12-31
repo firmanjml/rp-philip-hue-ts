@@ -4,13 +4,13 @@ import { theme } from '../../constants';
 import { FlatList, TouchableOpacity, View, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Divider from '../../components/Divider';
-import { ClearBridge } from '../../redux/actions';
+import { ManualSearchBridge } from '../../redux/actions';
 import { useNavigation } from 'react-navigation-hooks';
 import { Ionicons } from '@expo/vector-icons';
 
 function BridgeListScreen() {
     const dispatch = useDispatch();
-    const searchBridgeClear = useCallback(() => dispatch(ClearBridge()), [dispatch])
+    const searchBridge = useCallback((ip: string, navigate: any) => dispatch(ManualSearchBridge(ip, navigate)), [dispatch])
     const night_mode = useSelector(state => state.night_mode);
     const bridge_list = useSelector(state => state.search_bridge_list);
 
@@ -19,7 +19,7 @@ function BridgeListScreen() {
     const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
     const textcolor = { color: night_mode ? colors.white : colors.black }
 
-    const { goBack } = useNavigation();
+    const { goBack, navigate } = useNavigation();
 
     return (
         <Block style={backgroundcolor}>
@@ -30,7 +30,7 @@ function BridgeListScreen() {
                         style={{ height: 40, width: 80, justifyContent: 'center' }}>
                         <Ionicons name='md-arrow-back' size={30} color={'white'} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => searchBridgeClear()}><Text h1 style={textcolor}>List of found bridge</Text></TouchableOpacity>
+                    <Text h1 style={textcolor}>List of found bridge</Text>
                 </View>
                 <FlatList
                     style={{ marginVertical: 10, padding: 10 }}
@@ -46,7 +46,10 @@ function BridgeListScreen() {
                                 [
                                     {
                                         text: 'Yes',
-                                        style: 'default'
+                                        style: 'default',
+                                        onPress: () => {
+                                            searchBridge(item.internalipaddress, navigate)
+                                        }
                                     },
                                     {
                                         text: 'No',

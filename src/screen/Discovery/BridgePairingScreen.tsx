@@ -1,0 +1,90 @@
+import React, { useState, useCallback } from 'react';
+import { TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import { Block, Button, Text, Input } from '../../components';
+import { useSelector, useDispatch } from 'react-redux';
+import { theme } from '../../constants';
+import { useNavigation } from 'react-navigation-hooks';
+import Countdown from 'react-countdown-now';
+import { PairBridge } from '../../redux/actions';
+
+function BridgePairingScreen() {
+    const dispatch = useDispatch();
+    const pairBridge = useCallback(() => dispatch(PairBridge()), [dispatch]);
+                            
+    const night_mode = useSelector(state => state.night_mode);
+    const pairing_bridge = useSelector(state => state.pairing_bridge);
+    const bridge_list = useSelector(state => state.bridge_list);
+
+    const { colors } = theme;
+
+    const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
+    const titlecolor = { color: night_mode ? colors.white : colors.black }
+    const textcolor = { color: night_mode ? colors.white : colors.gray3 }
+
+    const { navigate, goBack } = useNavigation();
+
+    return (
+        <Block style={backgroundcolor} >
+            <Block container>
+                <Text h1 center bold style={[{ textAlign: 'left' }, titlecolor]}>
+                    Link to Philips Hue
+                    </Text>
+                <Text paragraph style={[{ marginTop: 20 }, textcolor]}>
+                    To link this device with the Bridge, press the push-link button of the Hue bridge you want to connect to.
+                    </Text>
+                <Block style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image
+                        source={require('../../../assets/images/pushlink.png')}
+                        resizeMode='contain'
+                        style={{ width: 250, height: 240 }}
+                    />
+                </Block>
+                <Block style={{ marginTop: 20 }}>
+                    {<Countdown
+                        date={Date.now() + 30000}
+                        intervalDelay={1000}
+                        renderer={({ seconds, completed}) => {
+                            if (!completed) {
+                                return <Text center h1 style={[textcolor]}>{seconds} seconds</Text>;
+                            } else {
+                                return <Text center h1 style={[textcolor]}>No device link.</Text>;
+                            }
+                        }}
+                        onComplete={() => {
+                            Alert.alert(
+                                'Error',
+                                'No Bridge was found.',
+                                [
+                                    {
+                                        text: "OK",
+                                        onPress: () => goBack()
+                                    }
+                                ],
+                                { cancelable: false }
+                            )
+                        }}
+                        onTick={() => {
+                            const { id } = pairing_bridge;
+                            if (!bridge_list[id]) {
+                                pairBridge();
+                            } else {
+                                navigate('Room');
+                            }
+                        }}
+                    />}
+                    <Block style={{ marginTop: 20 }}>
+                        <Text paragraph style={textcolor}>
+                            Note: You will have 30 seconds to press the push-link button
+                        </Text>
+                    </Block>
+                </Block>
+            </Block>
+        </Block>
+    )
+}
+
+const styles = StyleSheet.create({
+
+});
+
+export default BridgePairingScreen;

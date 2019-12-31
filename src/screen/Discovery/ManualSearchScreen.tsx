@@ -8,9 +8,9 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { useNavigation } from 'react-navigation-hooks';
 import { ManualSearchBridge } from '../../redux/actions';
 
-function ManualLinkScreen() {
+function ManualSearchScreen() {
     const dispatch = useDispatch();
-    const searchBridge = useCallback((ip: string) => dispatch(ManualSearchBridge(ip)), [dispatch]);
+    const searchBridge = useCallback((ip: string, navigate) => dispatch(ManualSearchBridge(ip,navigate)), [dispatch]);
     const night_mode = useSelector(state => state.night_mode);
     const loading = useSelector(state => state.search_bridge_loading);
 
@@ -67,7 +67,7 @@ function ManualLinkScreen() {
                         endColor='#2BDACD'
                         onPress={() => {
                             if (ipStr.match(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/)) {
-                                searchBridge(ipStr);
+                                searchBridge(ipStr, navigate);
                             } else {
                                 Alert.alert(
                                     'Invalid IP Format',
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ManualLinkScreen;
+export default ManualSearchScreen;

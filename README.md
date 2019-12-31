@@ -20,8 +20,8 @@ $ yarn start
 
 ### Todo List
   - [x] Custom UI Component
-  - [ ] Local Storage (Redux)
-  - [ ] Intro Screen
+  - [x] Local Storage (Redux)
+  - [x] Intro Screen
   - [ ] Bridge Pairing
   - [ ] Create new room
   - [ ] List room information
@@ -41,3 +41,4 @@ $ yarn start
   - [ImanRizal99](http://github.com/ImanRizal99/)
   - [JuraimiJ](https://github.com/JuraimiJ/)
   - [Naga](https://github.com/n350xwb/)
+  - [React UI Kit](https://github.com/react-ui-kit/dribbble2react/tree/master/plant-app)
