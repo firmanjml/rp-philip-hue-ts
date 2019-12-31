@@ -22,7 +22,7 @@ $ yarn start
   - [x] Custom UI Component
   - [x] Local Storage (Redux)
   - [x] Intro Screen
-  - [ ] Bridge Pairing
+  - [X] Bridge Pairing
   - [ ] Create new room
   - [ ] List room information
   - [ ] Control selected room
