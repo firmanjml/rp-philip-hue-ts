@@ -9,7 +9,7 @@ import { theme } from '../constants';
 
 type ColorType = 'accent' | 'primary' | 'secondary' | 'tertiary' | 'black' | 'white' | 'gray' | 'gray2' | 'gray3' | 'red';
 
-interface Props extends TouchableOpacityProperties {
+export interface ButtonProps extends TouchableOpacityProperties {
     style?: any;
     opacity?: number;
     gradient?: boolean;
@@ -36,7 +36,7 @@ const Button = ({
     shadow,
     children,
     ...props
-}: Props) => {
+}: ButtonProps) => {
     const buttonStyles = [
         styles.button,
         shadow && styles.shadow,

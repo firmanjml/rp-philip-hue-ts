@@ -10,7 +10,7 @@ type TextTransformType = 'none' | 'uppercase' | 'lowercase' | 'capitalize';
 type TextAlignType = 'auto' | 'left' | 'right' | 'center' | 'justify';
 type ColorType = 'accent' | 'primary' | 'secondary' | 'tertiary' | 'black' | 'white' | 'gray' | 'gray2' | 'gray3' | 'red';
 
-interface Props extends TextProperties {
+export interface TextProps extends TextProperties {
     h1?: boolean;
     h2?: boolean;
     h3?: boolean;
@@ -44,7 +44,7 @@ interface Props extends TextProperties {
     gray3?: boolean;
     style?: any;
     red?: boolean;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 const Text = (
@@ -84,7 +84,7 @@ const Text = (
         red,
         children,
         ...props
-    }: Props
+    }: TextProps
 ) => {
     const textStyles = [
         styles.text,

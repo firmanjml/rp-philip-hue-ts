@@ -10,7 +10,7 @@ import Text from './Text';
 import Button from './Button';
 import { theme } from '../constants';
 
-interface Props extends TextInputProperties {
+export interface InputProps extends TextInputProperties {
     label?: any;
     error?: any;
     secure?: any;
@@ -34,7 +34,7 @@ const Input = ({
     rightStyle,
     onRightPress,
     ...props
-}: Props) => {
+}: InputProps) => {
     const [toggleSecure, setToggleSecure] = React.useState(false);
     const isSecure = toggleSecure ? false : secure;
 

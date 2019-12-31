@@ -7,7 +7,7 @@ import {
     Animated,
 } from 'react-native';
 
-interface Props {
+export interface ToggleSwitchProps {
     isOn: boolean;
     label?: string;
     onColor: string;
@@ -19,7 +19,7 @@ interface Props {
     speed?: number;
 }
 
-export default class ToggleSwitch extends Component<Props>{
+export default class ToggleSwitch extends Component<ToggleSwitchProps>{
     static calculateDimensions(size) {
         switch (size) {
             case 'small':

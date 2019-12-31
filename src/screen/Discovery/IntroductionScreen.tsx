@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
-import { Animated, FlatList, Image, StyleSheet } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Animated, FlatList, Image, StyleSheet, View } from 'react-native';
 import { Block, Text, Button } from '../../components';
 import { theme } from '../../constants';
 import Layout from '../../constants/Layout';
+import { useSelector, useDispatch } from 'react-redux'
+import { SearchBridge, ClearBridge } from '../../redux/actions';
+import { useNavigation } from 'react-navigation-hooks';
 
 function IntroductionScreen(props) {
+    const night_mode = useSelector(state => state.night_mode);
+
     let scrollX = new Animated.Value(0);
-
-    const [manual, setManual] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-
     const { colors } = theme;
-    const backgroundcolor = { backgroundColor: colors.background };
-    const textcolor = { color: colors.white }
+
+    const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
+    const textcolor = { color: night_mode ? colors.white : colors.black };
+
+    const { navigate } = useNavigation();
 
     function renderIllustrations() {
         const { illustrations } = props;
@@ -72,11 +76,60 @@ function IntroductionScreen(props) {
     }
 
     function renderPairBtn() {
-        return (
-            <Button gradient disabled={false} onPress={() => console.log('pressed')}>
-                <Text center semibold white>Test</Text>
-            </Button>
-        )
+        // actions
+        const dispatch = useDispatch();
+        const searchBridge = useCallback(() => dispatch(SearchBridge), [dispatch])
+        const searchBridgeClear = useCallback(() => dispatch(ClearBridge()), [dispatch])
+        
+        // states
+        const loading = useSelector(state => state.search_bridge_loading);
+        const bridge_list = useSelector(state => state.search_bridge_list);
+        const bridge_state = useSelector(state => state.search_bridge_complete);
+
+        if (!bridge_state) {
+            if (loading) {
+                return (
+                    <Button>
+                        <Text center semibold>Searching...</Text>
+                    </Button>
+                )
+            } else {
+                return (
+                    <Button gradient 
+                        startColor='#0A7CC4'
+                        endColor='#2BDACD' 
+                        onPress={() => searchBridge()}>
+                        <Text white center semibold>Search for bridge</Text>
+                    </Button>
+                )
+            }
+        } else {
+            if (bridge_list.length === 0) {
+                return (
+                    <View>
+                        <Button 
+                            gradient 
+                            startColor='#0A7CC4'
+                            endColor='#2BDACD' 
+                            onPress={() => navigate('ManualLink')}>
+                            <Text white center semibold>Manual Search</Text>
+                        </Button>
+                        <Text center white>No Bridge Found</Text>
+                    </View>
+                )
+            } else {
+                return (
+                    <Button 
+                        gradient 
+                        startColor='#0A7CC4'
+                        endColor='#2BDACD' 
+                        onPress={() => navigate('BridgeList')}>
+                        <Text white center semibold>{`${bridge_list.length} ${bridge_list.length > 1 ? 'bridges' : 'bridge'} found`}</Text>
+                    </Button>
+                )
+            }
+        }
+        
     }
 
     return (
@@ -95,9 +148,6 @@ function IntroductionScreen(props) {
             </Block>
             <Block middle flex={0.5} margin={[0, theme.sizes.padding * 2]}>
                 {renderPairBtn()}
-                <Button shadow onPress={() => console.log('pressed')}>
-                    <Text center semibold>Manual Search</Text>
-                </Button>
             </Block>
         </Block>
     )

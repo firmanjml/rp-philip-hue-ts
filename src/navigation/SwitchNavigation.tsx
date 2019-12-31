@@ -1,18 +1,18 @@
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import TestScreen from '../screen/Test/TestScreen';
-import IntroductionScreen from '../screen/Discovery/IntroductionScreen';
+import DiscoveryNavigation from './DiscoveryNavigation';
 
 const SwitchNavigator = createSwitchNavigator(
     {
         Test: {
             screen: TestScreen
         },
-        Intro: {
-            screen: IntroductionScreen
+        Discovery: {
+            screen: DiscoveryNavigation
         }
     },
     {
-        initialRouteName: 'Intro'
+        initialRouteName: 'Discovery'
     }
 );
 

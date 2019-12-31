@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { theme } from '../constants';
 
-interface Props extends ViewProperties {
+export interface BlockProps extends ViewProperties {
     margin?: any;
     padding?: number | object;
     flex?: boolean | number;
@@ -54,7 +54,7 @@ const Block = ({
     style,
     children,
     ...props 
-}: Props) => {
+}: BlockProps) => {
 
     function handleMargins() {
         if (typeof margin === 'number') {
