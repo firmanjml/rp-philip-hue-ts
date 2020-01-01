@@ -54,10 +54,9 @@ const search_bridge_list = (state: Array<object> = [], action) => {
 
 const bridge_list = (state: object = {}, action) => {
     if (action.type === C.ADD_BRIDGE) {
-        state[action.payload.bridgeid] = action.payload;
-        state[action.payload.bridgeid]['username'] = action.username;
-        console.log(state);
-        return state;
+        return Object.assign({}, state, {
+            [action.payload.bridgeid]: action.payload
+        });
     } else {
         return state;
     }
@@ -72,6 +71,23 @@ const pairing_bridge = (state: object = {}, action) => {
     }
 }
 
+const group_list = (state: object = {}, action) => {
+    if (action.type === C.FETCH_ALL_GROUPS) {
+        state = action.payload;
+        return state;
+    } else {
+        return state;
+    }
+}
+
+const light_list = (state: object = {}, action) => {
+    if (action.type === C.FETCH_ALL_LIGHTS) {
+        state = action.payload;
+        return state;
+    } else {
+        return state;
+    }
+}
 export default combineReducers({
     loading,
     night_mode,
@@ -79,5 +95,7 @@ export default combineReducers({
     search_bridge_loading,
     search_bridge_list,
     bridge_list,
-    pairing_bridge
+    pairing_bridge,
+    group_list,
+    light_list
 });

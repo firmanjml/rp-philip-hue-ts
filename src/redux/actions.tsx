@@ -2,6 +2,7 @@ import C from './constants';
 import axios from 'axios';
 import { Alert } from 'react-native';
 import Constants from 'expo-constants';
+import { ConfigurationTypes, CreateUserType, BridgePairedType } from '../types';
 
 export const ChangeLoading = (visibility: boolean) => ({
     type: C.CHANGE_LOADING,
@@ -47,12 +48,14 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
             url: `http://${bridge_ip}/api/nouser/config`,
             method: 'GET'
         });
-        if (response.data.modelid === "BSB001") {
+        const config: ConfigurationTypes = response.data;
+
+        if (config.modelid === "BSB001") {
             dispatch({
                 type: C.PAIRING_BRIDGE,
                 payload: {
-                    ip: bridge_ip,
-                    id: response.data.bridgeid
+                    ip: config.ipaddress,
+                    id: config.bridgeid
                 }
             });
             navigate('PairBridge');
@@ -88,6 +91,7 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
 
 export const PairBridge = () => async (dispatch, getState) => {
     const bridgeip = getState().pairing_bridge.ip;
+
     const response = await axios({
         url: `http://${bridgeip}/api`,
         method: 'POST',
@@ -96,16 +100,60 @@ export const PairBridge = () => async (dispatch, getState) => {
         } 
     });
 
-    if (response && response.data[0].success) {
+    const user: CreateUserType = response.data[0];
+
+    if (response && user.success) {
         const result = await axios({
             url: `http://${bridgeip}/api/nouser/config`,
             method: 'GET'
         });
 
+        const config: ConfigurationTypes = result.data;
+        config['username'] = user.success.username;
+
         dispatch({
             type: C.ADD_BRIDGE,
-            username: response.data[0].success.username,
-            payload: result.data
+            payload: config
         });
     }
+}
+
+export const GetRoomList = () => async (dispatch, getState) => {
+    const state = getState();
+    const { id }: BridgePairedType = state.pairing_bridge;
+    const bridge: ConfigurationTypes = state.bridge_list[id];
+    
+    dispatch(ChangeLoading(true));
+    const response = await axios({
+        url: `http://${bridge.ipaddress}/api/${bridge.username}/groups`,
+        method: 'GET'
+    });
+
+    if (response && response.data) {
+        dispatch({
+            type: C.FETCH_ALL_GROUPS,
+            payload: response.data
+        })
+    }
+
+    dispatch(ChangeLoading(false));
+}
+
+export const GetLightList = () => async (dispatch, getState) => {
+    const state = getState();
+    const { id }: BridgePairedType = state.pairing_bridge;
+    const bridge: ConfigurationTypes = state.bridge_list[id];
+    
+    dispatch(ChangeLoading(true));
+    const response = await axios({
+        url: `http://${bridge.ipaddress}/api/${bridge.username}/lights`,
+        method: 'GET'
+    });
+    if (response && response.data) {
+        dispatch({
+            type: C.FETCH_ALL_LIGHTS,
+            payload: response.data
+        })
+    }
+    dispatch(ChangeLoading(false));
 }

@@ -15,6 +15,7 @@ function BridgePairingScreen() {
     const pairing_bridge = useSelector(state => state.pairing_bridge);
     const bridge_list = useSelector(state => state.bridge_list);
 
+    const { id } = pairing_bridge;
     const { colors } = theme;
 
     const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
@@ -64,17 +65,16 @@ function BridgePairingScreen() {
                             )
                         }}
                         onTick={() => {
-                            const { id } = pairing_bridge;
-                            if (!bridge_list[id]) {
+                            if (typeof bridge_list[id] === "undefined") {
                                 pairBridge();
                             } else {
-                                navigate('Room');
+                                navigate('App');
                             }
                         }}
                     />}
                     <Block style={{ marginTop: 20 }}>
                         <Text paragraph style={textcolor}>
-                            Note: You will have 30 seconds to press the push-link button
+                            Note: You have 30 seconds to press the push-link button
                         </Text>
                     </Block>
                 </Block>

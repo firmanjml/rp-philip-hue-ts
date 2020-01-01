@@ -25,7 +25,6 @@ const MainNavigator = createStackNavigator(
             screen: BridgePairingScreen
         }
     },
-    
     {
         initialRouteName: 'Intro',
         defaultNavigationOptions: {
