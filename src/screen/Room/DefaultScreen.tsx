@@ -70,7 +70,7 @@ function DefaultScreen() {
             )
         } else if (tab === "SCHEDULES") {
             return (
-                <Text center white bold>Schedule is not ready at this moment</Text>
+                <Text center white bold>Lek luu tgh bikin ni</Text>
             )
         }
     }
