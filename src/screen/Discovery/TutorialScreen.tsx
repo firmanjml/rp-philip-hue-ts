@@ -24,8 +24,8 @@ function TutorialScreen() {
         <Block style={backgroundcolor} >
             <Block container style={styles.slide}>
                 <View style={{ marginTop: 10 }} >
-                    <Text style={[styles.title, textcolor]}>{item.title}</Text>
-                    <Text medium style={[styles.text, textcolor]}>{item.text}</Text>
+                    <Text googlebold style={[styles.title, textcolor]}>{item.title}</Text>
+                    <Text googlemedium style={[styles.text, textcolor]}>{item.text}</Text>
                     <TouchableOpacity onPress={async () => {
                         await WebBrowser.openBrowserAsync('https://www.technobezz.com/how-to-find-your-router-ip-address/');
                     }}>

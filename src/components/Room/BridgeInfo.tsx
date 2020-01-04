@@ -17,9 +17,9 @@ function BridgeInfo({
     const [infoState, setInfoState] = useState(0);
     
     return (
-        <Block flex={false} style={{ paddingHorizontal: theme.sizes.base * 2 }}>
+        <Block flex={false} style={{ marginTop : 5, paddingHorizontal: theme.sizes.base * 2 }}>
             <TouchableOpacity onPress={() => setInfoState(state => (state === 4) ? state = 0 : state + 1)}>
-                <Text style={[textcolor]}>Info: {infoState === 0 ? bridge.name : infoState === 1 ? bridge.ipaddress : infoState === 2 ? bridge.bridgeid : infoState === 3 ? bridge.modelid : bridge.username.substring(0, 16)}</Text>
+                <Text googleregular style={[textcolor]}>{infoState === 0 ? `Bridge Name : ${bridge.name}` : infoState === 1 ? `IP Address : ${bridge.ipaddress}` : infoState === 2 ? `Bridge ID : ${bridge.bridgeid}` : infoState === 3 ? bridge.modelid : bridge.username.substring(0, 16)}</Text>
             </TouchableOpacity>
         </Block>
     )

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
-import { Block, Text} from '../../components';
+import { StyleSheet, Dimensions} from 'react-native';
+import { Block, Text } from '../../components';
 import { theme } from '../../constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -38,7 +38,6 @@ function DefaultScreen() {
         getLightList();
     }, []);
 
-
     const renderTabs = (tab) => {
         const isActive = active === tab;
         return (
@@ -52,7 +51,7 @@ function DefaultScreen() {
                     backgroundcolor,
                     isActive ? styles.active : null
                 ]}>
-                <Text size={16} bold gray={!isActive} secondary={isActive}>
+                <Text size={16} googlebold gray={!isActive} secondary={isActive}>
                     {tab}
                 </Text>
             </TouchableOpacity>
@@ -78,7 +77,7 @@ function DefaultScreen() {
     return (
         <Block style={backgroundcolor}>
             <Block flex={false} center row space="between" style={styles.header}>
-                <Text h1 style={[textcolor, { fontWeight: 'bold' }]}>Explore</Text>
+                <Text h1 googlebold style={[textcolor]}>Explore</Text>
             </Block>
 
             <BridgeInfo
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.background
     },
     header: {
-        marginTop: 50,
+        marginTop: 25,
         paddingHorizontal: theme.sizes.base * 2,
     },
     avatar: {

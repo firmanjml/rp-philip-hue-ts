@@ -80,7 +80,7 @@ function IntroductionScreen(props) {
         const dispatch = useDispatch();
         const searchBridge = useCallback(() => dispatch(SearchBridge), [dispatch])
         const searchBridgeClear = useCallback(() => dispatch(ClearBridge()), [dispatch])
-        
+
         // states
         const loading = useSelector(state => state.search_bridge_loading);
         const bridge_list = useSelector(state => state.search_bridge_list);
@@ -90,16 +90,16 @@ function IntroductionScreen(props) {
             if (loading) {
                 return (
                     <Button>
-                        <Text center semibold>Searching...</Text>
+                        <Text center googlebold>Searching...</Text>
                     </Button>
                 )
             } else {
                 return (
-                    <Button gradient 
+                    <Button gradient
                         startColor='#0A7CC4'
-                        endColor='#2BDACD' 
+                        endColor='#2BDACD'
                         onPress={() => searchBridge()}>
-                        <Text white center semibold>Search for bridge</Text>
+                        <Text white center googlebold>Search for bridge</Text>
                     </Button>
                 )
             }
@@ -107,39 +107,39 @@ function IntroductionScreen(props) {
             if (bridge_list.length === 0) {
                 return (
                     <View>
-                        <Button 
-                            gradient 
+                        <Button
+                            gradient
                             startColor='#0A7CC4'
-                            endColor='#2BDACD' 
+                            endColor='#2BDACD'
                             onPress={() => navigate('ManualLink')}>
-                            <Text white center semibold>Manual Search</Text>
+                            <Text white center googlemedium>Manual Search</Text>
                         </Button>
-                        <Text center white>No Bridge Found</Text>
+                        <Text center googleregular white style={{marginTop : 10}}>No Bridge Found</Text>
                     </View>
                 )
             } else {
                 return (
-                    <Button 
-                        gradient 
+                    <Button
+                        gradient
                         startColor='#0A7CC4'
-                        endColor='#2BDACD' 
+                        endColor='#2BDACD'
                         onPress={() => navigate('BridgeList')}>
-                        <Text white center semibold>{`${bridge_list.length} ${bridge_list.length > 1 ? 'bridges' : 'bridge'} found`}</Text>
+                        <Text white center googlebold>{`${bridge_list.length} ${bridge_list.length > 1 ? 'bridges' : 'bridge'} found`}</Text>
                     </Button>
                 )
             }
         }
-        
+
     }
 
     return (
         <Block style={backgroundcolor}>
             <Block center bottom flex={0.4}>
-                <Text h1 center bold style={textcolor}>
-                    Your Smarter Home
+                <Text h1 center googlebold style={[textcolor]}>
+                    LigHue
                 </Text>
-                <Text h3 gray2 style={{ marginTop: theme.sizes.padding / 2 }}>
-                    Enjoy the experience
+                <Text h3 gray2 googleregular style={{ marginTop: theme.sizes.padding / 2}}>
+                    Control your Hue Bridge V1
                 </Text>
             </Block>
             <Block center middle>
@@ -147,7 +147,7 @@ function IntroductionScreen(props) {
                 {renderDots()}
             </Block>
             <Block middle flex={0.5} margin={[0, theme.sizes.padding * 2]}>
-                {renderPairBtn()}
+                {renderPairBtn()} 
             </Block>
         </Block>
     )

@@ -50,7 +50,7 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
         });
         const config: ConfigurationTypes = response.data;
 
-        if (config.modelid === "BSB001") {
+        if (true) {
             dispatch({
                 type: C.PAIRING_BRIDGE,
                 payload: {
@@ -61,7 +61,7 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
             navigate('PairBridge');
         } else {
             Alert.alert(
-                "Unsupported Bridge",
+                "Unsupported Bridgee",
                 "Use Bridge V1 only",
                 [
                     {
@@ -75,7 +75,7 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
     } catch (e) {
         Alert.alert(
             "Timeout Error",
-            "Couldn't retrieve information from the IP",
+            "Couldn't retrieve information from the IPee",
             [
                 {
                     text: "OK",
@@ -83,7 +83,8 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
                 }
             ],
             { cancelable: false }
-        );
+        ); 
+        console.log(e)
     } finally {
         dispatch(SearchBridgeLoading(false));
     }

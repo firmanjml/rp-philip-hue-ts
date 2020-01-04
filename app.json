@@ -12,10 +12,14 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "androidStatusBar" : {
+        "barStyle" : "light-content",
+        "backgroundColor" : "#34495E"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#34495E"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

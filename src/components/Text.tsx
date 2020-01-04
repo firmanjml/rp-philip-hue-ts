@@ -28,6 +28,9 @@ export interface TextProps extends TextProperties {
     medium?: boolean;
     weight?: number;
     light?: boolean;
+    googlebold? : boolean;
+    googleregular? : boolean;
+    googlemedium? : boolean;
     center?: boolean;
     right?: boolean;
     spacing?: number;
@@ -63,6 +66,9 @@ const Text = (
         regular,
         bold,
         semibold,
+        googlebold,
+        googleregular,
+        googlemedium,
         medium,
         weight,
         light,
@@ -121,6 +127,9 @@ const Text = (
         gray2 && styles.gray2,
         gray3 && styles.gray3,
         red && styles.red,
+        googlebold && styles.googlebold,
+        googleregular && styles.googleregular,
+        googlemedium && styles.googlemedium,
         style
     ];
 
@@ -168,6 +177,9 @@ const styles = StyleSheet.create({
     gray3: { color: theme.colors.gray3 },
     red: { color: theme.colors.accent },
     // fonts
+    googlebold : {fontFamily: 'googlesans-bold'},
+    googleregular : {fontFamily: 'googlesans-regular'},
+    googlemedium : {fontFamily: 'googlesans-medium'},
     h1: theme.fonts.h1,
     h2: theme.fonts.h2,
     h3: theme.fonts.h3,

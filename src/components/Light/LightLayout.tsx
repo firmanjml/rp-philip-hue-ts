@@ -27,7 +27,7 @@ function LightLayout({
                             <Text h1 bold style={[textcolor]}>No light is found.</Text>
                             <TouchableOpacity
                                 onPress={() => console.log('navigate')}>
-                                <Text h2 style={{ marginTop: 5, color: '#20D29B' }}>Search for new lights</Text>
+                                <Text h2 googlebold style={{ marginTop: 5, color: '#20D29B' }}>Search for new lights</Text>
                             </TouchableOpacity>
                         </Block>
                     ) 
@@ -41,8 +41,8 @@ function LightLayout({
                                             <View style={{ flexDirection: 'row' }}>
                                                 <TouchableOpacity>
                                                     <View style={{ flexDirection: 'row' }}>
-                                                        {/* <Icon.Ionicons name="ios-bulb" size={25} style={{ alignSelf: 'center', marginRight: 10 }} color={theme.colors.gray} /> */}
-                                                        <Text style={[textcolor, { fontSize: 21, alignSelf: 'center' }]}>{lights[keys].name.length > 15 ? lights[keys].name.substring(0, 15) + "..." : lights[keys].name}</Text>
+                                                        {/*<Icon.Ionicons name="ios-bulb" size={25} style={{ alignSelf: 'center', marginRight: 10 }} color={theme.colors.gray} /> */}
+                                                        <Text googlemedium style={[textcolor, { fontSize: 21, alignSelf: 'center' }]}>{lights[keys].name.length > 15 ? lights[keys].name.substring(0, 15) + "..." : lights[keys].name}</Text>
                                                     </View>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity>

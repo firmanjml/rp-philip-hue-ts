@@ -27,10 +27,10 @@ function BridgePairingScreen() {
     return (
         <Block style={backgroundcolor} >
             <Block container>
-                <Text h1 center bold style={[{ textAlign: 'left' }, titlecolor]}>
+                <Text h1 center googlebold style={[{ textAlign: 'left' }, titlecolor]}>
                     Link to Philips Hue
                     </Text>
-                <Text paragraph style={[{ marginTop: 20 }, textcolor]}>
+                <Text paragraph googleregular style={[{ marginTop: 20 }, textcolor]}>
                     To link this device with the Bridge, press the push-link button of the Hue bridge you want to connect to.
                     </Text>
                 <Block style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
@@ -46,9 +46,9 @@ function BridgePairingScreen() {
                         intervalDelay={1000}
                         renderer={({ seconds, completed}) => {
                             if (!completed) {
-                                return <Text center h1 style={[textcolor]}>{seconds} seconds</Text>;
+                                return <Text center h1 googlemedium style={[textcolor]}>{seconds} seconds</Text>;
                             } else {
-                                return <Text center h1 style={[textcolor]}>No device link.</Text>;
+                                return <Text center h1 googlemedium style={[textcolor]}>No device link.</Text>;
                             }
                         }}
                         onComplete={() => {
@@ -65,7 +65,7 @@ function BridgePairingScreen() {
                             )
                         }}
                         onTick={() => {
-                            if (typeof bridge_list[id] === "undefined") {
+                            if (!bridge_list[id]) {
                                 pairBridge();
                             } else {
                                 navigate('App');
@@ -73,7 +73,7 @@ function BridgePairingScreen() {
                         }}
                     />}
                     <Block style={{ marginTop: 20 }}>
-                        <Text paragraph style={textcolor}>
+                        <Text paragraph googleregular style={textcolor}>
                             Note: You have 30 seconds to press the push-link button
                         </Text>
                     </Block>

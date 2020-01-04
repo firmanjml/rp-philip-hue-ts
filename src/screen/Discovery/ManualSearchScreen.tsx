@@ -10,7 +10,7 @@ import { ManualSearchBridge } from '../../redux/actions';
 
 function ManualSearchScreen() {
     const dispatch = useDispatch();
-    const searchBridge = useCallback((ip: string, navigate) => dispatch(ManualSearchBridge(ip,navigate)), [dispatch]);
+    const searchBridge = useCallback((ip: string, navigate) => dispatch(ManualSearchBridge(ip, navigate)), [dispatch]);
     const night_mode = useSelector(state => state.night_mode);
     const loading = useSelector(state => state.search_bridge_loading);
 
@@ -18,6 +18,7 @@ function ManualSearchScreen() {
 
     const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
     const textcolor = { color: night_mode ? colors.white : colors.black }
+    const linkcolor = { color: '#ffffa0' }
     const titlecolor = { color: night_mode ? colors.white : colors.black }
     const bordercolor = { borderColor: night_mode ? colors.white : colors.black }
     const placeholdercolor = night_mode ? colors.gray2 : colors.gray3;
@@ -31,12 +32,15 @@ function ManualSearchScreen() {
         <Block style={backgroundcolor} >
             <Block container>
                 <Block flex={false} row space="between">
-                    <Text h1 center bold style={[{ textAlign: 'left' }, titlecolor]}>Find Hue Bridge</Text>
+                    <Text h1 center googlebold style={[{ textAlign: 'left' }, titlecolor]}>Find Hue Bridge</Text>
                     {/* {this.renderMenu()} */}
                 </Block>
-                <Text paragraph style={[{ marginTop: 20 }, textcolor]}>
-                    Make sure the Hue bridge is powered on and connected to the router of your current Wi-Fi. Then, tap search below.
+                <Text paragraph googleregular style={[{ marginTop: 20 }, textcolor]}>
+                    Make sure the Hue Bridge V1 is powered on and connected to the router of your current Wi-Fi. Then, tap search below.
                     </Text>
+                <TouchableOpacity onPress={() => navigate('Tutorial')}>
+                    <Text googleregular style={[textcolor]}>Guide to find out ip address</Text>
+                </TouchableOpacity>
                 <Block margin={[30, 0, 0, 0]} center>
                     <Image
                         source={require('../../../assets/images/router.png')}
@@ -45,20 +49,20 @@ function ManualSearchScreen() {
                     />
                 </Block>
                 <Block margin={[30, 0, 0, 0]}>
-                    <Text paragraph style={titlecolor}>
+                    <Text paragraph googleregular style={titlecolor}>
                         Manual IP
                         </Text>
                     <Input
                         style={[styles.textInput, textcolor, bordercolor]}
-                        keyboardType="numeric"
+                        keyboardType="email-address"
                         value={ipStr}
                         onChangeText={(value) => setIpStr(value)}
                         placeholder={'192.168.1.1'}
                         placeholderTextColor={placeholdercolor}
                         returnKeyType={'done'}
                     />
-                    <Text paragraph style={[textcolor, { marginTop: 10 }]}>
-                        Advanced. You can also enter IP address above before starting the search.
+                    <Text googleregular paragraph style={[textcolor]}>
+                        Please enter the IP address of your Hue Bridge above.
                         </Text>
                 </Block>
                 <Block middle flex={1}>
@@ -82,11 +86,8 @@ function ManualSearchScreen() {
                                 )
                             }
                         }}>
-                        <Text center semibold white>{loading ? 'Searching...' : 'Search'}</Text>
+                        <Text center googlemedium white>{loading ? 'Searching...' : 'Search'}</Text>
                     </Button>
-                    <TouchableOpacity style={{ marginTop: 5 }} onPress={() => navigate('Tutorial')}>
-                        <Text style={[{ textAlign: 'center' }, textcolor]}>Having trouble finding out Bridge IP?</Text>
-                    </TouchableOpacity>
                 </Block>
             </Block>
             <KeyboardSpacer />
