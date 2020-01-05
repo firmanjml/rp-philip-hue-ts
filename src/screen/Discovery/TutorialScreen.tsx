@@ -11,25 +11,22 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { Ionicons } from '@expo/vector-icons';
 
 function TutorialScreen() {
-    const night_mode = useSelector(state => state.night_mode);
-
     const { colors } = theme;
 
-    const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
-    const textcolor = { color: night_mode ? colors.white : colors.black }
+    const backgroundcolor = { backgroundColor: colors.background };
 
     const { goBack } = useNavigation();
-    
+
     const renderItem = ({ item }) => (
         <Block style={backgroundcolor} >
             <Block container style={styles.slide}>
                 <View style={{ marginTop: 10 }} >
-                    <Text googlebold style={[styles.title, textcolor]}>{item.title}</Text>
-                    <Text googlemedium style={[styles.text, textcolor]}>{item.text}</Text>
+                    <Text googlebold style={[styles.title]}>{item.title}</Text>
+                    <Text googlemedium style={[styles.text]}>{item.text}</Text>
                     <TouchableOpacity onPress={async () => {
                         await WebBrowser.openBrowserAsync('https://www.technobezz.com/how-to-find-your-router-ip-address/');
                     }}>
-                        <Text medium style={[styles.text, textcolor, { textDecorationLine: 'underline' }]}>{item.url}</Text>
+                        <Text googlemedium style={[styles.text, { textDecorationLine: 'underline' }]}>{item.url}</Text>
                     </TouchableOpacity>
                 </View>
             </Block>

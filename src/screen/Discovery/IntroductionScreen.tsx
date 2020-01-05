@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {useCallback} from 'react';
 import { Animated, FlatList, Image, StyleSheet, View } from 'react-native';
 import { Block, Text, Button } from '../../components';
 import { theme } from '../../constants';
@@ -6,15 +6,14 @@ import Layout from '../../constants/Layout';
 import { useSelector, useDispatch } from 'react-redux'
 import { SearchBridge, ClearBridge } from '../../redux/actions';
 import { useNavigation } from 'react-navigation-hooks';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function IntroductionScreen(props) {
-    const night_mode = useSelector(state => state.night_mode);
 
     let scrollX = new Animated.Value(0);
     const { colors } = theme;
 
-    const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
-    const textcolor = { color: night_mode ? colors.white : colors.black };
+    const backgroundcolor = { backgroundColor: colors.background};
 
     const { navigate } = useNavigation();
 
@@ -99,7 +98,7 @@ function IntroductionScreen(props) {
                         startColor='#0A7CC4'
                         endColor='#2BDACD'
                         onPress={() => searchBridge()}>
-                        <Text white center googlebold>Search for bridge</Text>
+                        <Text center googlebold>Search for bridge</Text>
                     </Button>
                 )
             }
@@ -114,7 +113,7 @@ function IntroductionScreen(props) {
                             onPress={() => navigate('ManualLink')}>
                             <Text white center googlemedium>Manual Search</Text>
                         </Button>
-                        <Text center googleregular white style={{marginTop : 10}}>No Bridge Found</Text>
+                        <Text center style={{ marginTop: 10 }}>No Bridge Found</Text>
                     </View>
                 )
             } else {
@@ -124,7 +123,7 @@ function IntroductionScreen(props) {
                         startColor='#0A7CC4'
                         endColor='#2BDACD'
                         onPress={() => navigate('BridgeList')}>
-                        <Text white center googlebold>{`${bridge_list.length} ${bridge_list.length > 1 ? 'bridges' : 'bridge'} found`}</Text>
+                        <Text center googlebold>{`${bridge_list.length} ${bridge_list.length > 1 ? 'bridges' : 'bridge'} found`}</Text>
                     </Button>
                 )
             }
@@ -132,13 +131,23 @@ function IntroductionScreen(props) {
 
     }
 
+    function renderManualBtn() {
+        return (
+            <TouchableOpacity
+                style={{marginTop : 10}}
+                onPress={() => navigate('ManualLink')}>
+                <Text center>Manual Search</Text>
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <Block style={backgroundcolor}>
             <Block center bottom flex={0.4}>
-                <Text h1 center googlebold style={[textcolor]}>
+                <Text h1 center googlebold>
                     LigHue
                 </Text>
-                <Text h3 gray2 googleregular style={{ marginTop: theme.sizes.padding / 2}}>
+                <Text h3 gray2 googleregular style={{ marginTop: theme.sizes.padding / 2 }}>
                     Control your Hue Bridge V1
                 </Text>
             </Block>
@@ -147,7 +156,8 @@ function IntroductionScreen(props) {
                 {renderDots()}
             </Block>
             <Block middle flex={0.5} margin={[0, theme.sizes.padding * 2]}>
-                {renderPairBtn()} 
+                {renderPairBtn()}
+                {renderManualBtn()}
             </Block>
         </Block>
     )

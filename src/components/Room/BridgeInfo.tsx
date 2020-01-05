@@ -5,12 +5,10 @@ import Block from '../Block';
 import { ConfigurationTypes } from '../../types';
 
 interface BridgeInfoProps {
-    textcolor: any;
     theme: any;
     bridge: ConfigurationTypes;
 }
 function BridgeInfo({
-    textcolor,
     theme,
     bridge
 }: BridgeInfoProps) {
@@ -19,7 +17,7 @@ function BridgeInfo({
     return (
         <Block flex={false} style={{ marginTop : 5, paddingHorizontal: theme.sizes.base * 2 }}>
             <TouchableOpacity onPress={() => setInfoState(state => (state === 4) ? state = 0 : state + 1)}>
-                <Text googleregular style={[textcolor]}>{infoState === 0 ? `Bridge Name : ${bridge.name}` : infoState === 1 ? `IP Address : ${bridge.ipaddress}` : infoState === 2 ? `Bridge ID : ${bridge.bridgeid}` : infoState === 3 ? bridge.modelid : bridge.username.substring(0, 16)}</Text>
+                <Text googleregular>{infoState === 0 ? `Bridge Name : ${bridge.name}` : infoState === 1 ? `IP Address : ${bridge.ipaddress}` : infoState === 2 ? `Bridge ID : ${bridge.bridgeid}` : infoState === 3 ? bridge.modelid : bridge.username.substring(0, 16)}</Text>
             </TouchableOpacity>
         </Block>
     )

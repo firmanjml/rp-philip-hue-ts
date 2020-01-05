@@ -11,17 +11,7 @@ import { ManualSearchBridge } from '../../redux/actions';
 function ManualSearchScreen() {
     const dispatch = useDispatch();
     const searchBridge = useCallback((ip: string, navigate) => dispatch(ManualSearchBridge(ip, navigate)), [dispatch]);
-    const night_mode = useSelector(state => state.night_mode);
     const loading = useSelector(state => state.search_bridge_loading);
-
-    const { colors } = theme;
-
-    const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
-    const textcolor = { color: night_mode ? colors.white : colors.black }
-    const linkcolor = { color: '#ffffa0' }
-    const titlecolor = { color: night_mode ? colors.white : colors.black }
-    const bordercolor = { borderColor: night_mode ? colors.white : colors.black }
-    const placeholdercolor = night_mode ? colors.gray2 : colors.gray3;
 
     const [checking, setChecking] = useState(false);
     const [ipStr, setIpStr] = useState("");
@@ -29,17 +19,17 @@ function ManualSearchScreen() {
     const { navigate } = useNavigation();
 
     return (
-        <Block style={backgroundcolor} >
+        <Block style={styles.container} >
             <Block container>
                 <Block flex={false} row space="between">
-                    <Text h1 center googlebold style={[{ textAlign: 'left' }, titlecolor]}>Find Hue Bridge</Text>
+                    <Text h1 center googlebold style={{ textAlign: 'left' }}>Find Hue Bridge</Text>
                     {/* {this.renderMenu()} */}
                 </Block>
-                <Text paragraph googleregular style={[{ marginTop: 20 }, textcolor]}>
+                <Text paragraph style={{ marginTop: 20 }}>
                     Make sure the Hue Bridge V1 is powered on and connected to the router of your current Wi-Fi. Then, tap search below.
                     </Text>
                 <TouchableOpacity onPress={() => navigate('Tutorial')}>
-                    <Text googleregular style={[textcolor]}>Guide to find out ip address</Text>
+                    <Text>Guide to find out ip address</Text>
                 </TouchableOpacity>
                 <Block margin={[30, 0, 0, 0]} center>
                     <Image
@@ -49,19 +39,19 @@ function ManualSearchScreen() {
                     />
                 </Block>
                 <Block margin={[30, 0, 0, 0]}>
-                    <Text paragraph googleregular style={titlecolor}>
+                    <Text paragraph googlemedium>
                         Manual IP
                         </Text>
                     <Input
-                        style={[styles.textInput, textcolor, bordercolor]}
+                        style={styles.textInput}
                         keyboardType="email-address"
                         value={ipStr}
                         onChangeText={(value) => setIpStr(value)}
                         placeholder={'192.168.1.1'}
-                        placeholderTextColor={placeholdercolor}
+                        placeholderTextColor={theme.colors.gray2}
                         returnKeyType={'done'}
                     />
-                    <Text googleregular paragraph style={[textcolor]}>
+                    <Text paragraph>
                         Please enter the IP address of your Hue Bridge above.
                         </Text>
                 </Block>
@@ -86,7 +76,7 @@ function ManualSearchScreen() {
                                 )
                             }
                         }}>
-                        <Text center googlemedium white>{loading ? 'Searching...' : 'Search'}</Text>
+                        <Text center googlemedium>{loading ? 'Searching...' : 'Search'}</Text>
                     </Button>
                 </Block>
             </Block>
@@ -96,13 +86,19 @@ function ManualSearchScreen() {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor : theme.colors.background
+    },
     textInput: {
         height: 25,
         borderBottomWidth: .5,
+        color : theme.colors.white,
+        fontFamily : 'googlesans-regular',
         borderRadius: 0,
         borderWidth: 0,
         textAlign: 'left',
-        paddingBottom: 10
+        paddingBottom: 10,
+        borderColor: theme.colors.white
     }
 });
 

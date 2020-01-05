@@ -11,13 +11,11 @@ import { Ionicons } from '@expo/vector-icons';
 function BridgeListScreen() {
     const dispatch = useDispatch();
     const searchBridge = useCallback((ip: string, navigate: any) => dispatch(ManualSearchBridge(ip, navigate)), [dispatch])
-    const night_mode = useSelector(state => state.night_mode);
     const bridge_list = useSelector(state => state.search_bridge_list);
 
     const { colors } = theme;
 
-    const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
-    const textcolor = { color: night_mode ? colors.white : colors.black }
+    const backgroundcolor = { backgroundColor: colors.background};
 
     const { goBack, navigate } = useNavigation();
 
@@ -30,7 +28,7 @@ function BridgeListScreen() {
                         style={{ height: 40, width: 80, justifyContent: 'center' }}>
                         <Ionicons name='md-arrow-back' size={30} color={'white'} />
                     </TouchableOpacity>
-                    <Text h1 style={textcolor}>List of found bridge</Text>
+                    <Text h1>List of found bridge</Text>
                 </View>
                 <FlatList
                     style={{ marginVertical: 10, padding: 10 }}
@@ -60,12 +58,12 @@ function BridgeListScreen() {
                             )
                         }}>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={textcolor}>Bridge IP: </Text>
-                                <Text style={textcolor}>{item.internalipaddress}</Text>
+                                <Text>Bridge IP: </Text>
+                                <Text>{item.internalipaddress}</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={textcolor}>Bridge ID: </Text>
-                                <Text style={textcolor}>{item.id}</Text>
+                                <Text>Bridge ID: </Text>
+                                <Text>{item.id}</Text>
                             </View>
                             <Divider margin={1} />
                         </TouchableOpacity>

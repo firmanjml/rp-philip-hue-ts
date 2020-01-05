@@ -2,7 +2,7 @@ import C from './constants';
 import axios from 'axios';
 import { Alert } from 'react-native';
 import Constants from 'expo-constants';
-import { ConfigurationTypes, CreateUserType, BridgePairedType } from '../types';
+import { ConfigurationTypes, CreateUserType, BridgePairedType, LightTypes } from '../types';
 
 export const ChangeLoading = (visibility: boolean) => ({
     type: C.CHANGE_LOADING,
@@ -83,7 +83,7 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
                 }
             ],
             { cancelable: false }
-        ); 
+        );
         console.log(e)
     } finally {
         dispatch(SearchBridgeLoading(false));
@@ -98,7 +98,7 @@ export const PairBridge = () => async (dispatch, getState) => {
         method: 'POST',
         data: {
             devicetype: `Lighue#${Constants.deviceName}`
-        } 
+        }
     });
 
     const user: CreateUserType = response.data[0];
@@ -123,7 +123,7 @@ export const GetRoomList = () => async (dispatch, getState) => {
     const state = getState();
     const { id }: BridgePairedType = state.pairing_bridge;
     const bridge: ConfigurationTypes = state.bridge_list[id];
-    
+
     dispatch(ChangeLoading(true));
     const response = await axios({
         url: `http://${bridge.ipaddress}/api/${bridge.username}/groups`,
@@ -144,7 +144,7 @@ export const GetLightList = () => async (dispatch, getState) => {
     const state = getState();
     const { id }: BridgePairedType = state.pairing_bridge;
     const bridge: ConfigurationTypes = state.bridge_list[id];
-    
+
     dispatch(ChangeLoading(true));
     const response = await axios({
         url: `http://${bridge.ipaddress}/api/${bridge.username}/lights`,
@@ -157,4 +157,29 @@ export const GetLightList = () => async (dispatch, getState) => {
         })
     }
     dispatch(ChangeLoading(false));
+}
+
+export const UpdateLightState = (lampID, jsondata) => async (dispatch, getState) => {
+    const state = getState();
+    const { id }: BridgePairedType = state.pairing_bridge;
+    const bridge: ConfigurationTypes = state.bridge_list[id];
+
+    const response = await axios({
+        url: `http://${bridge.ipaddress}/api/${bridge.username}/lights/${lampID}/state`,
+        method: 'PUT',
+        data: jsondata
+    });
+    if (response && response.data) {
+        var payload = {};
+        response.data.map((data) => {
+            let key = Object.keys(data.success)[0].substring(Object.keys(data.success)[0].lastIndexOf('/') + 1);
+            let value = Object.values(data.success)[0];
+            payload[key] = value;
+        })
+        dispatch({
+            type: C.CHANGE_LIGHT_STATE,
+            id: lampID,
+            payload: payload
+        })
+    }
 }

@@ -11,26 +11,20 @@ function BridgePairingScreen() {
     const dispatch = useDispatch();
     const pairBridge = useCallback(() => dispatch(PairBridge()), [dispatch]);
                             
-    const night_mode = useSelector(state => state.night_mode);
     const pairing_bridge = useSelector(state => state.pairing_bridge);
     const bridge_list = useSelector(state => state.bridge_list);
 
     const { id } = pairing_bridge;
-    const { colors } = theme;
-
-    const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight };
-    const titlecolor = { color: night_mode ? colors.white : colors.black }
-    const textcolor = { color: night_mode ? colors.white : colors.gray3 }
 
     const { navigate, goBack } = useNavigation();
 
     return (
-        <Block style={backgroundcolor} >
+        <Block style={styles.container} >
             <Block container>
-                <Text h1 center googlebold style={[{ textAlign: 'left' }, titlecolor]}>
+                <Text h1 center googlebold style={{ textAlign: 'left' }}>
                     Link to Philips Hue
                     </Text>
-                <Text paragraph googleregular style={[{ marginTop: 20 }, textcolor]}>
+                <Text paragraph style={{ marginTop: 20 }}>
                     To link this device with the Bridge, press the push-link button of the Hue bridge you want to connect to.
                     </Text>
                 <Block style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center' }}>
@@ -46,9 +40,9 @@ function BridgePairingScreen() {
                         intervalDelay={1000}
                         renderer={({ seconds, completed}) => {
                             if (!completed) {
-                                return <Text center h1 googlemedium style={[textcolor]}>{seconds} seconds</Text>;
+                                return <Text center h1 googlemedium>{seconds} seconds</Text>;
                             } else {
-                                return <Text center h1 googlemedium style={[textcolor]}>No device link.</Text>;
+                                return <Text center h1 googlemedium>No device link.</Text>;
                             }
                         }}
                         onComplete={() => {
@@ -73,8 +67,8 @@ function BridgePairingScreen() {
                         }}
                     />}
                     <Block style={{ marginTop: 20 }}>
-                        <Text paragraph googleregular style={textcolor}>
-                            Note: You have 30 seconds to press the push-link button
+                        <Text paragraph>
+                            You have 30 seconds to press the push-link button
                         </Text>
                     </Block>
                 </Block>
@@ -84,7 +78,9 @@ function BridgePairingScreen() {
 }
 
 const styles = StyleSheet.create({
-
+    container : {
+        backgroundColor : theme.colors.background
+    }
 });
 
 export default BridgePairingScreen;

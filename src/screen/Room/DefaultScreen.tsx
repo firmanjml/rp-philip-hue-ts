@@ -17,7 +17,6 @@ function DefaultScreen() {
     const getRoomList = useCallback(() => dispatch(GetRoomList()), [dispatch]);
     const getLightList = useCallback(() => dispatch(GetLightList()), [dispatch]);
 
-    const night_mode: boolean = useSelector(state => state.night_mode);
     const groups: GroupTypes = useSelector(state => state.group_list);
     const lights: LightTypes = useSelector(state => state.light_list);
 
@@ -25,10 +24,6 @@ function DefaultScreen() {
     const bridge: ConfigurationTypes = useSelector(state => state.bridge_list[paired.id]);
 
     const { colors } = theme;
-    const refreshtextcolor = night_mode ? colors.white : colors.black
-    const textcolor = { color: night_mode ? colors.white : colors.black }
-    const graytextcolor = { color: night_mode ? colors.gray2 : colors.black }
-    const backgroundcolor = { backgroundColor: night_mode ? colors.background : colors.backgroundLight }
 
     const [active, setActive] = useState('ROOMS');
     const tabs = ['ROOMS', 'LIGHTS', 'SCHEDULES'];
@@ -48,7 +43,7 @@ function DefaultScreen() {
                 }}
                 style={[
                     styles.tab,
-                    backgroundcolor,
+                    styles.container,
                     isActive ? styles.active : null
                 ]}>
                 <Text size={16} googlebold gray={!isActive} secondary={isActive}>
@@ -61,11 +56,11 @@ function DefaultScreen() {
     const renderLayout = (tab) => {
         if (tab === "ROOMS") {
             return (
-                <RoomLayout theme={theme} styles={styles} groups={groups} textcolor={textcolor} refreshtextcolor={refreshtextcolor} />
+                <RoomLayout theme={theme} styles={styles} groups={groups} />
             )
         } else if (tab === "LIGHTS") {
             return (
-                <LightLayout theme={theme} styles={styles} lights={lights} textcolor={textcolor} />
+                <LightLayout theme={theme} styles={styles} lights={lights} />
             )
         } else if (tab === "SCHEDULES") {
             return (
@@ -75,17 +70,16 @@ function DefaultScreen() {
     }
 
     return (
-        <Block style={backgroundcolor}>
+        <Block style={styles.container}>
             <Block flex={false} center row space="between" style={styles.header}>
-                <Text h1 googlebold style={[textcolor]}>Explore</Text>
+                <Text h1 googlebold>Explore</Text>
             </Block>
 
             <BridgeInfo
                 theme={theme}
-                textcolor={textcolor}
                 bridge={bridge} />
 
-            <Block flex={false} row style={[styles.tabs, backgroundcolor]}>
+            <Block flex={false} row style={[styles.tabs, styles.container]}>
                 {tabs.map(tab => renderTabs(tab))}
             </Block>
             {renderLayout(active)}
@@ -106,7 +100,7 @@ const styles = StyleSheet.create({
         width: theme.sizes.base * 2.2,
     },
     tabs: {
-        marginTop: 20,
+        marginTop: 25,
         justifyContent: 'space-around',
         borderBottomColor: theme.colors.gray2,
         borderBottomWidth: StyleSheet.hairlineWidth,

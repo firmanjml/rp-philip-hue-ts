@@ -84,6 +84,9 @@ const light_list = (state: object = {}, action) => {
     if (action.type === C.FETCH_ALL_LIGHTS) {
         state = action.payload;
         return state;
+    } else if (action.type === C.CHANGE_LIGHT_STATE) {
+        _.merge(state[action.id].state, action.payload);
+        return state;
     } else {
         return state;
     }
