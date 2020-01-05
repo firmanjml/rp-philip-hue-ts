@@ -2,7 +2,7 @@ import C from './constants';
 import axios from 'axios';
 import { Alert } from 'react-native';
 import Constants from 'expo-constants';
-import { ConfigurationTypes, CreateUserType, BridgePairedType, LightTypes } from '../types';
+import { ConfigurationTypes, CreateUserType, BridgePairedType, LightTypes, LightUpdateStates } from '../types';
 
 export const ChangeLoading = (visibility: boolean) => ({
     type: C.CHANGE_LOADING,
@@ -50,7 +50,7 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
         });
         const config: ConfigurationTypes = response.data;
 
-        if (true) {
+        if (config.modelid === "BSB001") {
             dispatch({
                 type: C.PAIRING_BRIDGE,
                 payload: {
@@ -61,7 +61,7 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
             navigate('PairBridge');
         } else {
             Alert.alert(
-                "Unsupported Bridgee",
+                "Unsupported Bridge",
                 "Use Bridge V1 only",
                 [
                     {
@@ -75,7 +75,7 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
     } catch (e) {
         Alert.alert(
             "Timeout Error",
-            "Couldn't retrieve information from the IPee",
+            "Couldn't retrieve information from the IP",
             [
                 {
                     text: "OK",
@@ -164,11 +164,17 @@ export const UpdateLightState = (lampID, jsondata) => async (dispatch, getState)
     const { id }: BridgePairedType = state.pairing_bridge;
     const bridge: ConfigurationTypes = state.bridge_list[id];
 
+    const data: LightUpdateStates = {
+        ...jsondata,
+        transitiontime: 10
+    };
+
     const response = await axios({
         url: `http://${bridge.ipaddress}/api/${bridge.username}/lights/${lampID}/state`,
         method: 'PUT',
-        data: jsondata
+        data
     });
+    
     if (response && response.data) {
         var payload = {};
         response.data.map((data) => {

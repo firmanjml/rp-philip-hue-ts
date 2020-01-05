@@ -4,8 +4,8 @@ import Text from "../Text";
 import { useDispatch } from 'react-redux';
 import { View, TouchableOpacity } from "react-native";
 import ToggleSwitch from "../ToggleSwitch";
-import { LightTypes } from "../../types";
-import { ScrollView } from 'react-native-gesture-handler';
+import { LightTypes, LightUpdateStates } from "../../types";
+import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import { UpdateLightState } from '../../redux/actions';
 import { useNavigation } from 'react-navigation-hooks';
 
@@ -21,7 +21,7 @@ function LightLayout({
 }: LightLayoutProps) {
 
     const dispatch = useDispatch();
-    const updatelight = useCallback((lampID, json) => dispatch(UpdateLightState(lampID, json)), [dispatch]);
+    const updatelight = useCallback((lampID: string, json: LightUpdateStates) => dispatch(UpdateLightState(lampID, json)), [dispatch]);
     const { navigate } = useNavigation();
 
     return (
@@ -39,29 +39,29 @@ function LightLayout({
                     )
                     :
                     (
-                        <ScrollView>
-                            {
-                                Object.keys(lights).map((keys) => (
-                                    <View key={keys} style={{ paddingHorizontal: theme.sizes.base * 2 }}>
-                                        <View style={styles.bulbRow}>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <TouchableOpacity onPress={(keys) => navigate('ControlBulb', {lampID : 1})}>
-                                                    <View style={{ flexDirection: 'row' }}>
-                                                        <Text googlemedium style={{ fontSize: 21, alignSelf: 'center' }}>{lights[keys].name.length > 15 ? lights[keys].name.substring(0, 15) + "..." : lights[keys].name}</Text>
-                                                    </View>
-                                                </TouchableOpacity>
-                                            </View>
-                                            <ToggleSwitch
-                                                offColor="#DDDDDD"
-                                                onColor={theme.colors.secondary}
-                                                onToggle={() => updatelight(keys, `{"on" : ${!lights[keys].state.on}}`)}
-                                                isOn={lights[keys].state.on}
-                                            />
+                        <FlatList
+                            keyExtractor={(item) => item}
+                            data={Object.keys(lights)}
+                            renderItem={({ item: key }) => (
+                                <View style={{ paddingHorizontal: theme.sizes.base * 2 }}>
+                                    <View style={styles.bulbRow}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <TouchableOpacity onPress={() => navigate('ControlBulb', { lampID: key })}>
+                                                <View style={{ flexDirection: 'row' }}>
+                                                    <Text googlemedium style={{ fontSize: 21, alignSelf: 'center' }}>{lights[key].name.length > 15 ? lights[key].name.substring(0, 15) + "..." : lights[key].name}</Text>
+                                                </View>
+                                            </TouchableOpacity>
                                         </View>
+                                        <ToggleSwitch
+                                            offColor="#DDDDDD"
+                                            onColor={theme.colors.secondary}
+                                            onToggle={() => updatelight(key, { on: !lights[key].state.on })}
+                                            isOn={lights[key].state.on}
+                                        />
                                     </View>
-                                ))
-                            }
-                        </ScrollView>
+                                </View>
+                            )}
+                        />
                     )
             }
         </View>

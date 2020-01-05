@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Block, Text, ToggleSwitch, Input } from '../../components';
 import { theme } from '../../constants';
 import Slider from 'react-native-slider';
-import { LightTypes } from '../../types';
+import { LightTypes, LightUpdateStates } from '../../types';
 import { ColorPicker } from "react-native-color-picker";
 import { UpdateLightState } from '../../redux/actions';
 import { useNavigationParam } from 'react-navigation-hooks';
@@ -16,7 +16,7 @@ function ControlBulbScreen() {
 
     const dispatch = useDispatch();
     const light: LightTypes = useSelector(state => state.light_list);
-    const updatelight = useCallback((lampID, json) => dispatch(UpdateLightState(lampID, json)), [dispatch]);
+    const updatelight = useCallback((lampID: string, json: LightUpdateStates) => dispatch(UpdateLightState(lampID, json)), [dispatch]);
     const bordercolor = { borderColor: colors.white }
 
     return (
@@ -26,7 +26,7 @@ function ControlBulbScreen() {
                 <ToggleSwitch
                     offColor="#DDDDDD"
                     onColor={theme.colors.secondary}
-                    onToggle={() => updatelight(lampID, `{"on" : ${!light[lampID].state.on}}`)}
+                    onToggle={() => updatelight(lampID, { on: !light[lampID].state.on })}
                     isOn={light[lampID].state.on}
                 />
             </Block>
@@ -49,8 +49,8 @@ function ControlBulbScreen() {
                 trackStyle={{ height: 15, borderRadius: 10 }}
                 minimumTrackTintColor={colors.secondary}
                 maximumTrackTintColor={"rgba(157, 163, 180, 0.10)"}
-                value={100}
-                onValueChange={console.log("sdas")}
+                value={light[lampID].state.bri}
+                onValueChange={(value) => updatelight(lampID, { bri: value })}
             />
             <Block flex={false} row style={styles.controlrow}>
                 <Ionicons name="ios-water" size={20} color="white"></Ionicons>
@@ -64,8 +64,8 @@ function ControlBulbScreen() {
                 trackStyle={{ height: 15, borderRadius: 10 }}
                 minimumTrackTintColor={colors.secondary}
                 maximumTrackTintColor={"rgba(157, 163, 180, 0.10)"}
-                value={100}
-                onValueChange={console.log("sdas")}
+                value={light[lampID].state.sat}
+                onValueChange={(value) => updatelight(lampID, { sat: value })}
             />
             <Block flex={false} row style={{ marginTop: 19 }}>
                 <Ionicons name="ios-color-filter" size={20} color="white"></Ionicons>
