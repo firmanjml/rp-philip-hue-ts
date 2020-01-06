@@ -24,12 +24,12 @@ $ yarn start
   - [x] Intro Screen
   - [X] Bridge Pairing
   - [ ] Create new room
-  - [ ] List room information
+  - [x] List room information
   - [ ] Control selected room
   - [ ] Edit selected room information
   - [ ] Search/Add new bulb
-  - [ ] List bulb information
-  - [ ] Control selected bulb
+  - [x] List bulb information
+  - [x] Control selected bulb
   - [ ] Edit selected bulb information
   - [ ] Create schedule
   - [ ] List scheduling information
