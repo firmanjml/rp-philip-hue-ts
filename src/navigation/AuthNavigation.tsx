@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from 'react-navigation-hooks';
-import { BridgePairedType } from '../types';
+import { BridgePairedType } from '../hueapi/types';
 
 function AuthNavigation() {
     let paired: BridgePairedType = useSelector(state => state.pairing_bridge);

@@ -2,7 +2,8 @@ import C from './constants';
 import axios from 'axios';
 import { Alert } from 'react-native';
 import Constants from 'expo-constants';
-import { ConfigurationTypes, CreateUserType, BridgePairedType, LightTypes, LightUpdateStates } from '../types';
+import { ConfigurationTypes, CreateUserType, BridgePairedType, LightTypes, LightUpdateStates } from '../hueapi/types';
+import hue from '../hueapi';
 
 export const ChangeLoading = (visibility: boolean) => ({
     type: C.CHANGE_LOADING,
@@ -14,21 +15,23 @@ export const SearchBridgeLoading = (visibility: boolean) => ({
     payload: visibility
 });
 
-export const SearchBridge = async (dispatch) => {
-    dispatch(SearchBridgeLoading(true));
-    const response = await axios({
-        url: 'https://discovery.meethue.com/',
-        method: 'GET'
-    });
-    dispatch({
-        type: C.SEARCH_BRIDGE,
-        payload: response.data
-    });
-    dispatch({
-        type: C.SEARCH_BRIDGE_COMPLETE,
-        payload: true
-    });
-    dispatch(SearchBridgeLoading(false));
+export const SearchBridge = () => async (dispatch) => {
+    try {
+        dispatch(SearchBridgeLoading(true));
+        const response = await hue.discover();
+        dispatch({
+            type: C.SEARCH_BRIDGE,
+            payload: response
+        });
+        dispatch({
+            type: C.SEARCH_BRIDGE_COMPLETE,
+            payload: true
+        });
+    } catch (e) {
+        console.log(e);
+    } finally {
+        dispatch(SearchBridgeLoading(false));
+    }
 }
 
 export const ClearBridge = () => (dispatch) => {
@@ -41,14 +44,10 @@ export const ClearBridge = () => (dispatch) => {
     });
 }
 
-export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (dispatch) => {
+export const ManualSearchBridge = (ip: string, navigate: any) => async (dispatch) => {
     try {
         dispatch(SearchBridgeLoading(true));
-        const response = await axios({
-            url: `http://${bridge_ip}/api/nouser/config`,
-            method: 'GET'
-        });
-        const config: ConfigurationTypes = response.data;
+        const config = await hue.bridge(ip).user('nouser').getConfig();
 
         if (config.modelid === "BSB001") {
             dispatch({
@@ -92,30 +91,22 @@ export const ManualSearchBridge = (bridge_ip: string, navigate: any) => async (d
 
 export const PairBridge = () => async (dispatch, getState) => {
     const bridgeip = getState().pairing_bridge.ip;
+    var bridge = await hue.bridge(bridgeip);
 
-    const response = await axios({
-        url: `http://${bridgeip}/api`,
-        method: 'POST',
-        data: {
-            devicetype: `Lighue#${Constants.deviceName}`
+    try {
+        const username = (await bridge.createUser(`Lighue#${Constants.deviceName}`))[0].success.username;
+        if (username) {
+            const config = await bridge.user(username).getConfig();
+            config.username = username;
+            dispatch({
+                type: C.ADD_BRIDGE,
+                payload: config
+            });
         }
-    });
+    } catch (e) {
+        console.log(e);
+    } finally {
 
-    const user: CreateUserType = response.data[0];
-
-    if (response && user.success) {
-        const result = await axios({
-            url: `http://${bridgeip}/api/nouser/config`,
-            method: 'GET'
-        });
-
-        const config: ConfigurationTypes = result.data;
-        config['username'] = user.success.username;
-
-        dispatch({
-            type: C.ADD_BRIDGE,
-            payload: config
-        });
     }
 }
 
@@ -125,19 +116,22 @@ export const GetRoomList = () => async (dispatch, getState) => {
     const bridge: ConfigurationTypes = state.bridge_list[id];
 
     dispatch(ChangeLoading(true));
-    const response = await axios({
-        url: `http://${bridge.ipaddress}/api/${bridge.username}/groups`,
-        method: 'GET'
-    });
 
-    if (response && response.data) {
-        dispatch({
-            type: C.FETCH_ALL_GROUPS,
-            payload: response.data
-        })
+    try {
+        const response = await hue.bridge(bridge.ipaddress).user(bridge.username).getGroups();
+
+        if (response) {
+            dispatch({
+                type: C.FETCH_ALL_GROUPS,
+                payload: response
+            });
+        }
+
+    } catch (e) {
+        console.log(e);
+    } finally {
+        dispatch(ChangeLoading(false));
     }
-
-    dispatch(ChangeLoading(false));
 }
 
 export const GetLightList = () => async (dispatch, getState) => {
@@ -146,45 +140,36 @@ export const GetLightList = () => async (dispatch, getState) => {
     const bridge: ConfigurationTypes = state.bridge_list[id];
 
     dispatch(ChangeLoading(true));
-    const response = await axios({
-        url: `http://${bridge.ipaddress}/api/${bridge.username}/lights`,
-        method: 'GET'
-    });
-    if (response && response.data) {
+
+    const response = await hue.bridge(bridge.ipaddress).user(bridge.username).getLights();
+
+    if (response) {
         dispatch({
             type: C.FETCH_ALL_LIGHTS,
-            payload: response.data
+            payload: response
         })
     }
     dispatch(ChangeLoading(false));
 }
 
-export const UpdateLightState = (lampID, jsondata) => async (dispatch, getState) => {
+export const UpdateLightState = (key: string, data: object) => async (dispatch, getState) => {
     const state = getState();
+
     const { id }: BridgePairedType = state.pairing_bridge;
     const bridge: ConfigurationTypes = state.bridge_list[id];
 
-    const data: LightUpdateStates = {
-        ...jsondata,
-        transitiontime: 10
-    };
+    const response = await hue.bridge(bridge.ipaddress).user(bridge.username).setLightState(key, data);
 
-    const response = await axios({
-        url: `http://${bridge.ipaddress}/api/${bridge.username}/lights/${lampID}/state`,
-        method: 'PUT',
-        data
-    });
-    
-    if (response && response.data) {
+    if (response) {
         var payload = {};
-        response.data.map((data) => {
+        response.map((data) => {
             let key = Object.keys(data.success)[0].substring(Object.keys(data.success)[0].lastIndexOf('/') + 1);
             let value = Object.values(data.success)[0];
             payload[key] = value;
         })
         dispatch({
             type: C.CHANGE_LIGHT_STATE,
-            id: lampID,
+            id: key,
             payload: payload
         })
     }

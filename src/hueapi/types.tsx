@@ -1,7 +1,7 @@
 type AlertType = 'none' | 'select' | 'lselect';
 type EffectType = 'none' | 'colorloop';
 
-interface LightStates {
+export interface LightStates {
     readonly on: boolean;
     readonly bri: number;
     readonly hue: number;
@@ -14,7 +14,7 @@ interface LightStates {
     readonly reachable: boolean;
 }
 
-interface LightSubTypes {
+export interface LightSubTypes {
     readonly state: LightStates;
     readonly type: string;
     readonly name: string;
@@ -46,14 +46,14 @@ export interface LightUpdateStates {
     xy_inc?: Array<number>;
 }
 
-interface SearchLight {
+export interface SearchLight {
     deviceid: Array<string>;
 }
 
 type ColorModeType = 'xy' | 'ct' | 'hs';
 type GroupingType = 'LightGroup' | 'Luminaire' | 'LightSource' | 'Room' | 'Entertainment' | 'Zone';
 
-interface GroupStates {
+export interface GroupStates {
     readonly on: boolean;
     readonly bri: number;
     readonly hue: number;
@@ -65,7 +65,7 @@ interface GroupStates {
     readonly colormode: ColorModeType;
 }
 
-interface GroupSubTypes {
+export interface GroupSubTypes {
     readonly name: string;
     readonly type: GroupingType;
     readonly lights: Array<string>;
@@ -113,6 +113,10 @@ interface CreateUserSubType {
 
 export interface CreateUserType {
     readonly success: CreateUserSubType
+}
+
+export interface CreateUser {
+    readonly [key: string]: CreateUserType;
 }
 
 export interface BridgePairedType {

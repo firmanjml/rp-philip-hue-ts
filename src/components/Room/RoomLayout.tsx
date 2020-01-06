@@ -4,7 +4,7 @@ import Text from '../Text';
 import Block from '../Block';
 import Card from '../Card';
 import Badge from '../Badge';
-import { GroupTypes } from '../../types';
+import { GroupTypes } from '../../hueapi/types';
 import { useDispatch } from 'react-redux';
 import { GetRoomList } from '../../redux/actions';
 import { useNavigation } from 'react-navigation-hooks';

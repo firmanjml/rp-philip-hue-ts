@@ -4,7 +4,7 @@ import { Block, Text } from '../../components';
 import { theme } from '../../constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { BridgePairedType, ConfigurationTypes, GroupTypes, LightTypes } from '../../types';
+import { BridgePairedType, ConfigurationTypes, GroupTypes, LightTypes } from '../../hueapi/types';
 import BridgeInfo from '../../components/Room/BridgeInfo';
 import RoomLayout from '../../components/Room/RoomLayout';
 import LightLayout from '../../components/Light/LightLayout';

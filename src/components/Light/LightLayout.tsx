@@ -4,7 +4,7 @@ import Text from "../Text";
 import { useDispatch } from 'react-redux';
 import { View, TouchableOpacity } from "react-native";
 import ToggleSwitch from "../ToggleSwitch";
-import { LightTypes, LightUpdateStates } from "../../types";
+import { LightTypes, LightUpdateStates } from "../../hueapi/types";
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import { UpdateLightState } from '../../redux/actions';
 import { useNavigation } from 'react-navigation-hooks';
@@ -21,7 +21,7 @@ function LightLayout({
 }: LightLayoutProps) {
 
     const dispatch = useDispatch();
-    const updatelight = useCallback((lampID: string, json: LightUpdateStates) => dispatch(UpdateLightState(lampID, json)), [dispatch]);
+    const updatelight = useCallback((key: string, data: LightUpdateStates) => dispatch(UpdateLightState(key, data)), [dispatch]);
     const { navigate } = useNavigation();
 
     return (

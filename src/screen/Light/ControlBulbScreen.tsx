@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Block, Text, ToggleSwitch, Input } from '../../components';
 import { theme } from '../../constants';
 import Slider from 'react-native-slider';
-import { LightTypes, LightUpdateStates } from '../../types';
+import { LightTypes, LightUpdateStates } from '../../hueapi/types';
 import { ColorPicker } from "react-native-color-picker";
 import { UpdateLightState } from '../../redux/actions';
 import { useNavigationParam } from 'react-navigation-hooks';
@@ -12,22 +12,22 @@ import { Ionicons } from '@expo/vector-icons';
 
 function ControlBulbScreen() {
     const { colors } = theme;
-    const lampID = useNavigationParam('lampID');
+    const key = useNavigationParam('lampID');
 
     const dispatch = useDispatch();
     const light: LightTypes = useSelector(state => state.light_list);
-    const updatelight = useCallback((lampID: string, json: LightUpdateStates) => dispatch(UpdateLightState(lampID, json)), [dispatch]);
+    const updatelight = useCallback((key: string, data: LightUpdateStates) => dispatch(UpdateLightState(key, data)), [dispatch]);
     const bordercolor = { borderColor: colors.white }
 
     return (
         <Block style={styles.container}>
             <Block flex={false} center row space="between" style={styles.header}>
-                <Text h1 googlebold>{light[lampID].name}</Text>
+                <Text h1 googlebold>{light[key].name}</Text>
                 <ToggleSwitch
                     offColor="#DDDDDD"
                     onColor={theme.colors.secondary}
-                    onToggle={() => updatelight(lampID, { on: !light[lampID].state.on })}
-                    isOn={light[lampID].state.on}
+                    onToggle={() => updatelight(key, { on: !light[key].state.on })}
+                    isOn={light[key].state.on}
                 />
             </Block>
             <Text googlemedium style={[styles.textControl, { marginTop: 30 }]}>Room Name</Text>
@@ -49,8 +49,8 @@ function ControlBulbScreen() {
                 trackStyle={{ height: 15, borderRadius: 10 }}
                 minimumTrackTintColor={colors.secondary}
                 maximumTrackTintColor={"rgba(157, 163, 180, 0.10)"}
-                value={light[lampID].state.bri}
-                onValueChange={(value) => updatelight(lampID, { bri: value })}
+                value={light[key].state.bri}
+                onValueChange={(value) => updatelight(key, { bri: value })}
             />
             <Block flex={false} row style={styles.controlrow}>
                 <Ionicons name="ios-water" size={20} color="white"></Ionicons>
@@ -64,8 +64,8 @@ function ControlBulbScreen() {
                 trackStyle={{ height: 15, borderRadius: 10 }}
                 minimumTrackTintColor={colors.secondary}
                 maximumTrackTintColor={"rgba(157, 163, 180, 0.10)"}
-                value={light[lampID].state.sat}
-                onValueChange={(value) => updatelight(lampID, { sat: value })}
+                value={light[key].state.sat}
+                onValueChange={(value) => updatelight(key, { sat: value })}
             />
             <Block flex={false} row style={{ marginTop: 19 }}>
                 <Ionicons name="ios-color-filter" size={20} color="white"></Ionicons>

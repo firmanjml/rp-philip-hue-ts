@@ -8,7 +8,8 @@ import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 const persistorConfig = {
     key: 'root',
     storage: AsyncStorage,
-    stateReconciler: autoMergeLevel2
+    stateReconciler: autoMergeLevel2,
+    blacklist: ['search_bridge_list', 'search_bridge_loading', 'search_bridge_complete']
 };
 
 const pReducer = persistReducer(persistorConfig, reducer);
