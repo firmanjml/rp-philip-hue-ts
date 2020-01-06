@@ -1,9 +1,10 @@
 import C from './constants';
-import axios from 'axios';
 import { Alert } from 'react-native';
 import Constants from 'expo-constants';
-import { ConfigurationTypes, CreateUserType, BridgePairedType, LightTypes, LightUpdateStates } from '../hueapi/types';
-import hue from '../hueapi';
+import { ConfigurationTypes, BridgePairedType } from '../types';
+import jshue, { IHueType } from 'jshue';
+
+const hue: IHueType = jshue();
 
 export const ChangeLoading = (visibility: boolean) => ({
     type: C.CHANGE_LOADING,
@@ -19,7 +20,6 @@ export const SearchBridge = () => async (dispatch) => {
     try {
         dispatch(SearchBridgeLoading(true));
         const response = await hue.discover();
-
         dispatch({
             type: C.SEARCH_BRIDGE,
             payload: response
@@ -98,12 +98,16 @@ export const PairBridge = () => async (dispatch, getState) => {
         const user = await bridge.createUser(`Lighue#${Constants.deviceName}`);
 
         if (user && user[0].success) {
-            const username = user[0].success.username;
+
+            const { username } = user[0].success;
             const config = await bridge.user(username).getConfig();
-            config.username = username;
+
             dispatch({
                 type: C.ADD_BRIDGE,
-                payload: config
+                payload: {
+                    ...config,
+                    username
+                }
             });
         }
     } catch (e) {

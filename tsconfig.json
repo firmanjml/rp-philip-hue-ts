@@ -15,6 +15,10 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "target": "esnext",
+    "typeRoots": [
+      "src/@types",
+      "node_modules/@types"
+    ]
   },
   "exclude": [
     "node_modules",
