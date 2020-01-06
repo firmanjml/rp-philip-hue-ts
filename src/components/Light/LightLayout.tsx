@@ -4,7 +4,7 @@ import Text from "../Text";
 import { useDispatch } from 'react-redux';
 import { View, TouchableOpacity } from "react-native";
 import ToggleSwitch from "../ToggleSwitch";
-import { LightTypes, LightUpdateStates } from "../../hueapi/types";
+import { LightTypes, LightUpdateStates } from "../../types";
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import { UpdateLightState } from '../../redux/actions';
 import { useNavigation } from 'react-navigation-hooks';
