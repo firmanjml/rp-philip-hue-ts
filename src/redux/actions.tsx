@@ -19,6 +19,7 @@ export const SearchBridge = () => async (dispatch) => {
     try {
         dispatch(SearchBridgeLoading(true));
         const response = await hue.discover();
+
         dispatch({
             type: C.SEARCH_BRIDGE,
             payload: response
@@ -94,8 +95,10 @@ export const PairBridge = () => async (dispatch, getState) => {
     var bridge = await hue.bridge(bridgeip);
 
     try {
-        const username = (await bridge.createUser(`Lighue#${Constants.deviceName}`))[0].success.username;
-        if (username) {
+        const user = await bridge.createUser(`Lighue#${Constants.deviceName}`);
+
+        if (user && user[0].success) {
+            const username = user[0].success.username;
             const config = await bridge.user(username).getConfig();
             config.username = username;
             dispatch({

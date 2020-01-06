@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import { Animated, FlatList, Image, StyleSheet, View } from 'react-native';
 import { Block, Text, Button } from '../../components';
 import { theme } from '../../constants';
@@ -13,7 +13,7 @@ function IntroductionScreen(props) {
     let scrollX = new Animated.Value(0);
     const { colors } = theme;
 
-    const backgroundcolor = { backgroundColor: colors.background};
+    const backgroundcolor = { backgroundColor: colors.background };
 
     const { navigate } = useNavigation();
 
@@ -77,8 +77,7 @@ function IntroductionScreen(props) {
     function renderPairBtn() {
         // actions
         const dispatch = useDispatch();
-        const searchBridge = useCallback(() => dispatch(SearchBridge), [dispatch])
-        const searchBridgeClear = useCallback(() => dispatch(ClearBridge()), [dispatch])
+        const searchBridge = useCallback(() => dispatch(SearchBridge()), [dispatch])
 
         // states
         const loading = useSelector(state => state.search_bridge_loading);
@@ -89,17 +88,24 @@ function IntroductionScreen(props) {
             if (loading) {
                 return (
                     <Button>
-                        <Text center googlebold>Searching...</Text>
+                        <Text center googlebold color='black'>Searching...</Text>
                     </Button>
                 )
             } else {
                 return (
-                    <Button gradient
-                        startColor='#0A7CC4'
-                        endColor='#2BDACD'
-                        onPress={() => searchBridge()}>
-                        <Text center googlebold>Search for bridge</Text>
-                    </Button>
+                    <View>
+                        <Button gradient
+                            startColor='#0A7CC4'
+                            endColor='#2BDACD'
+                            onPress={() => searchBridge()}>
+                            <Text center googlebold>Search for bridge</Text>
+                        </Button>
+                        <TouchableOpacity
+                            style={{ marginTop: 10 }}
+                            onPress={() => navigate('ManualLink')}>
+                            <Text center>Manual Search</Text>
+                        </TouchableOpacity>
+                    </View>
                 )
             }
         } else {
@@ -128,17 +134,6 @@ function IntroductionScreen(props) {
                 )
             }
         }
-
-    }
-
-    function renderManualBtn() {
-        return (
-            <TouchableOpacity
-                style={{marginTop : 10}}
-                onPress={() => navigate('ManualLink')}>
-                <Text center>Manual Search</Text>
-            </TouchableOpacity>
-        )
     }
 
     return (
@@ -157,7 +152,6 @@ function IntroductionScreen(props) {
             </Block>
             <Block middle flex={0.5} margin={[0, theme.sizes.padding * 2]}>
                 {renderPairBtn()}
-                {renderManualBtn()}
             </Block>
         </Block>
     )

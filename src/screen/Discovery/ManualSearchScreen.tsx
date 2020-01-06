@@ -44,7 +44,7 @@ function ManualSearchScreen() {
                         </Text>
                     <Input
                         style={styles.textInput}
-                        keyboardType="email-address"
+                        keyboardType='number-pad'
                         value={ipStr}
                         onChangeText={(value) => setIpStr(value)}
                         placeholder={'192.168.1.1'}
