@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import Text from '../Text';
 import Block from '../Block';
-import { ConfigurationTypes } from '../../hueapi/types';
+import { ConfigurationTypes } from '../../types';
 
 interface BridgeInfoProps {
     theme: any;

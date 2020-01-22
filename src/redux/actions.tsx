@@ -1,9 +1,10 @@
 import C from './constants';
-import axios from 'axios';
 import { Alert } from 'react-native';
 import Constants from 'expo-constants';
-import { ConfigurationTypes, CreateUserType, BridgePairedType, LightTypes, LightUpdateStates } from '../hueapi/types';
-import hue from '../hueapi';
+import { ConfigurationTypes, BridgePairedType } from '../types';
+import jshue, { IHueType } from 'jshue';
+
+const hue: IHueType = jshue();
 
 export const ChangeLoading = (visibility: boolean) => ({
     type: C.CHANGE_LOADING,
@@ -19,7 +20,6 @@ export const SearchBridge = () => async (dispatch) => {
     try {
         dispatch(SearchBridgeLoading(true));
         const response = await hue.discover();
-
         dispatch({
             type: C.SEARCH_BRIDGE,
             payload: response
@@ -98,18 +98,40 @@ export const PairBridge = () => async (dispatch, getState) => {
         const user = await bridge.createUser(`Lighue#${Constants.deviceName}`);
 
         if (user && user[0].success) {
-            const username = user[0].success.username;
+
+            const { username } = user[0].success;
             const config = await bridge.user(username).getConfig();
-            config.username = username;
+
             dispatch({
                 type: C.ADD_BRIDGE,
-                payload: config
+                payload: {
+                    ...config,
+                    username
+                }
             });
         }
     } catch (e) {
         console.log(e);
     } finally {
 
+    }
+}
+
+export const CreateRoom = (data: any) => async (dispatch, getState) => {
+    const state = getState();
+    const { id }: BridgePairedType = state.pairing_bridge;
+    const bridge: ConfigurationTypes = state.bridge_list[id];
+
+    dispatch(ChangeLoading(true));
+    try {
+        const response = await hue.bridge(bridge.ipaddress).user(bridge.username).createGroup(data);
+        if (response && response[0]) {
+            dispatch(GetRoomList());
+        }
+    } catch (e) {
+        console.log(e);
+    } finally {
+        dispatch(ChangeLoading(false));
     }
 }
 
@@ -137,6 +159,26 @@ export const GetRoomList = () => async (dispatch, getState) => {
     }
 }
 
+export const DeleteRoom = (key: string) => async(dispatch, getState) => {
+    const state = getState();
+    const { id }: BridgePairedType = state.pairing_bridge;
+    const bridge: ConfigurationTypes = state.bridge_list[id];
+
+    dispatch(ChangeLoading(true));
+    try {
+        const response = await hue.bridge(bridge.ipaddress).user(bridge.username).deleteGroup(key);
+        
+        if (response && response[0]) {
+            dispatch(GetRoomList());
+        }
+
+    } catch (e) {
+        console.log(e);
+    } finally {
+        dispatch(ChangeLoading(false));
+    }
+}
+
 export const GetLightList = () => async (dispatch, getState) => {
     const state = getState();
     const { id }: BridgePairedType = state.pairing_bridge;
@@ -144,15 +186,21 @@ export const GetLightList = () => async (dispatch, getState) => {
 
     dispatch(ChangeLoading(true));
 
-    const response = await hue.bridge(bridge.ipaddress).user(bridge.username).getLights();
+    try {
+        const response = await hue.bridge(bridge.ipaddress).user(bridge.username).getLights();
 
-    if (response) {
-        dispatch({
-            type: C.FETCH_ALL_LIGHTS,
-            payload: response
-        })
+        if (response) {
+            dispatch({
+                type: C.FETCH_ALL_LIGHTS,
+                payload: response
+            })
+        }
+        
+    } catch (e) {
+        console.log(e);
+    } finally {
+        dispatch(ChangeLoading(false));
     }
-    dispatch(ChangeLoading(false));
 }
 
 export const UpdateLightState = (key: string, data: object) => async (dispatch, getState) => {
@@ -175,5 +223,26 @@ export const UpdateLightState = (key: string, data: object) => async (dispatch, 
             id: key,
             payload: payload
         })
+    }
+}
+
+export const DeleteLight = (key: string) => async (dispatch, getState) => {
+    const state = getState();
+
+    const { id }: BridgePairedType = state.pairing_bridge;
+    const bridge: ConfigurationTypes = state.bridge_list[id];
+    
+    dispatch(ChangeLoading(true));
+
+    try {
+        const response = await hue.bridge(bridge.ipaddress).user(bridge.username).deleteLight(key);
+        if (response && response[0]) {
+            dispatch(GetLightList);
+        }
+        
+    } catch (e) {
+        console.log(e);
+    } finally {
+        dispatch(ChangeLoading(false));
     }
 }

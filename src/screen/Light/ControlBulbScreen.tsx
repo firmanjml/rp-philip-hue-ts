@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Block, Text, ToggleSwitch, Input } from '../../components';
 import { theme } from '../../constants';
 import Slider from 'react-native-slider';
-import { LightTypes, LightUpdateStates } from '../../hueapi/types';
+import { LightTypes, LightUpdateStates } from '../../types';
 import { ColorPicker } from "react-native-color-picker";
 import { UpdateLightState } from '../../redux/actions';
 import { useNavigationParam } from 'react-navigation-hooks';
