@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { Block, Text } from '../../components';
 import { theme } from '../../constants';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,7 +8,10 @@ import { BridgePairedType, ConfigurationTypes, GroupTypes, LightTypes } from '..
 import BridgeInfo from '../../components/Room/BridgeInfo';
 import RoomLayout from '../../components/Room/RoomLayout';
 import LightLayout from '../../components/Light/LightLayout';
+import ScheduleLayout from '../../components/Schedule/ScheduleLayout';
 import { GetRoomList, GetLightList } from '../../redux/actions';
+import { Entypo } from '@expo/vector-icons'
+import {useNavigation} from 'react-navigation-hooks'
 
 const { width } = Dimensions.get('window');
 
@@ -24,6 +27,8 @@ function DefaultScreen() {
     const bridge: ConfigurationTypes = useSelector(state => state.bridge_list[paired.id]);
 
     const { colors } = theme;
+    const { navigate } = useNavigation();
+
 
     const [active, setActive] = useState('ROOMS');
     const tabs = ['ROOMS', 'LIGHTS', 'SCHEDULES'];
@@ -64,7 +69,7 @@ function DefaultScreen() {
             )
         } else if (tab === "SCHEDULES") {
             return (
-                <Text center white bold>Lek luu tgh bikin ni</Text>
+                <ScheduleLayout theme={theme} styles={styles} schedule={null} />
             )
         }
     }
@@ -73,6 +78,9 @@ function DefaultScreen() {
         <Block style={styles.container}>
             <Block flex={false} center row space="between" style={styles.header}>
                 <Text h1 googlebold>Explore</Text>
+                <TouchableOpacity onPress={() => navigate('SettingList')}>
+                    <Entypo name="cog" size={30} color="white"></Entypo>
+                </TouchableOpacity>
             </Block>
 
             <BridgeInfo
@@ -120,10 +128,12 @@ const styles = StyleSheet.create({
         marginBottom: theme.sizes.base * 3.5,
     },
     bulbRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         marginBottom: 20,
-        marginTop: 10
+        paddingBottom: 15,
+        borderRadius: 10
+    },
+    scheduleRow: {
+
     },
     category: {
         minWidth: (width - (theme.sizes.padding * 2.4) - theme.sizes.base) / 2,
